@@ -4,6 +4,11 @@
     $password = "";
     $dbname="embl_tntms";
 
+    // $server = "localhost";
+    // $username ="root";
+    // $password = "";
+    // $dbname="embl_tntms";
+
     $conn = new mysqli($server,$username,$password,$dbname);
 
     if($conn->connect_error){

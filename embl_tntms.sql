@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 02, 2023 at 04:41 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Host: 127.0.0.1:3306
+-- Generation Time: Nov 06, 2023 at 01:24 AM
+-- Server version: 10.5.19-MariaDB-cll-lve
+-- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,8 +18,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `embl_tntms`
+-- Database: `u772977650_skystream`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applicantoverall`
+--
+
+CREATE TABLE `applicantoverall` (
+  `id` int(11) NOT NULL,
+  `applicantID` int(11) NOT NULL,
+  `initial` int(11) DEFAULT NULL,
+  `final` int(11) DEFAULT NULL,
+  `exam` int(11) DEFAULT NULL,
+  `overall` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -35,13 +50,6 @@ CREATE TABLE `applicantschedtbl` (
   `app_exam` datetime DEFAULT NULL,
   `sched_remarks` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `applicantschedtbl`
---
-
-INSERT INTO `applicantschedtbl` (`id`, `nameapp`, `app_initial`, `app_final`, `app_exam`, `sched_remarks`) VALUES
-(1, 'A-00001 - Sample Sample Sample', '2023-11-09 14:38:00', '2023-11-09 14:38:00', '2023-11-25 14:38:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -69,18 +77,6 @@ CREATE TABLE `applicanttbl` (
   `app_applydate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `applicanttbl`
---
-
-INSERT INTO `applicanttbl` (`id`, `applicantID`, `app_firstname`, `app_middlename`, `app_lastname`, `daily_rate`, `app_status`, `app_age`, `app_gender`, `app_address`, `app_birthdate`, `app_birthplace`, `app_positionTitle`, `app_email`, `app_contactno`, `app_files`, `app_applydate`) VALUES
-(1, 'A-00001', 'Sample', 'Sample', 'Sample', 1250, 'Qualified', 22, 'Male', '34', '2023-11-11', 'QC', 'CustomerServiceAgent', 'test@gmail.com', '34', 'joe-jik-vol-18-no-1-8.pdf', '2023-11-01'),
-(3, 'A-91090', 'Test', 'Test', 'Test', 1250, 'Active', 22, 'Male', 'Test', '2023-11-14', 'Test', 'AdministrativeStaff', 'te@4325432', '324', 'Branding-design.docx', '2023-11-01'),
-(4, 'A-66737', 'Sample', 'Sample', 'Sample', 1250, 'Active', 22, 'Male', 'Sample', '2023-11-24', 'Sample', 'Customer Service Manager', 'Sample@gmai.com', '324', 'Market-Research-Draft.docx', '2023-11-01'),
-(5, 'A-10646', 'Sample 2', 'Sample 2', 'Sample 2', 1250, 'Qualified', 22, 'Male', 'Sample 2', '2023-11-15', 'Sample 2', 'Customer Service Manager', 'Sample2@gmai.l.com', '234234', '2023-11-01_Branding-design (1).docx', '2023-11-01'),
-(6, 'A-36591', 'TestApplicant', 'TestApplicant', 'TestApplicant', 1250, 'Active', 22, 'Male', 'TestApplicant', '2023-11-30', 'TestApplicant', 'Customer Service Agent', 'TestApplicant@gmail.com', '32453242', '2023-11-02_Branding-design (1).docx', '2023-11-02'),
-(7, 'A-10334', 'WalaTO', 'WalaTO', 'WalaTO', 1250, 'Qualified', 22, 'Male', 'WalaTO', '2023-11-20', 'WalaTO', 'Customer Service Agent', 'WalaTO@gmail.com', '324324', '2023-11-02_The concept of digitalization and its impact on the modern economy.pdf', '2023-11-02');
-
 -- --------------------------------------------------------
 
 --
@@ -94,15 +90,6 @@ CREATE TABLE `benefits` (
   `details` longtext DEFAULT NULL,
   `deduction` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `benefits`
---
-
-INSERT INTO `benefits` (`id`, `benefits`, `type`, `details`, `deduction`) VALUES
-(1, 'Pag-ibig', 'Annually', '', 500),
-(2, 'Philhealth', 'Quarterly', '', 500),
-(3, 'SSS', 'Quarterly', '', 100);
 
 -- --------------------------------------------------------
 
@@ -155,13 +142,6 @@ CREATE TABLE `competencytbl` (
   `comp_remarks` varchar(2000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `competencytbl`
---
-
-INSERT INTO `competencytbl` (`id`, `comp_name`, `comp_datecreated`, `comp_sandq_files`, `comp_status`, `comp_remarks`) VALUES
-(1, 'Customer Service Agent', '2023-11-24', 'VOIDABLE-MARRIAGES.pdf', 'Pending', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -170,6 +150,8 @@ INSERT INTO `competencytbl` (`id`, `comp_name`, `comp_datecreated`, `comp_sandq_
 
 CREATE TABLE `create_payroll` (
   `id` int(11) NOT NULL,
+  `date_from` date DEFAULT NULL,
+  `date_to` date DEFAULT NULL,
   `employee_payroll` varchar(255) DEFAULT NULL,
   `fullname` varchar(255) DEFAULT NULL,
   `employeeID` varchar(255) DEFAULT NULL,
@@ -183,17 +165,12 @@ CREATE TABLE `create_payroll` (
   `philhealth` double DEFAULT NULL,
   `other_deductions` double DEFAULT NULL,
   `deduction_description` text DEFAULT NULL,
+  `overtime_hours` double DEFAULT NULL,
+  `overtime_rate` double DEFAULT NULL,
+  `overtime_pay` double DEFAULT NULL,
   `bonus` double DEFAULT NULL,
   `bonus_description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `create_payroll`
---
-
-INSERT INTO `create_payroll` (`id`, `employee_payroll`, `fullname`, `employeeID`, `net_pay`, `total_deductions`, `job_position`, `daily_rate`, `days_of_work`, `sss`, `pag_ibig`, `philhealth`, `other_deductions`, `deduction_description`, `bonus`, `bonus_description`) VALUES
-(4, 'employee01', 'Sample, Sample Sample', 'E-00001', 44700, 400, 'CustomerServiceAgent                                                                          ', 3000, 15, 100, 100, 100, 100, '', 100, ''),
-(5, 'test1234', 'Sample, Sample Sample', 'E-00001', 18450, 400, 'CustomerServiceAgent                                                                          ', 1250, 15, 100, 100, 100, 100, '', 100, '');
 
 -- --------------------------------------------------------
 
@@ -240,19 +217,6 @@ CREATE TABLE `employeetbl` (
   `emp_files` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `employeetbl`
---
-
-INSERT INTO `employeetbl` (`id`, `employeeID`, `emp_image`, `daily_rate`, `emp_firstname`, `emp_middlename`, `emp_lastname`, `emp_positionTitle`, `emp_sub`, `emp_status`, `emp_dateHired`, `emp_department`, `emp_gender`, `emp_address`, `emp_age`, `emp_birthdate`, `emp_birthplace`, `emp_contactno`, `emp_email`, `emp_files`) VALUES
-(1, 'E-00001', 'skystreamlogo.png', NULL, 'Sample', 'Sample', 'Sample', 'Customer Service Agent', 'Customer Service Supervisor', 'New Hired on Board', '2023-11-01', 'IT Department', 'Male', '34', 22, '2023-11-11', 'QC', '34', 'test@gmail.com', NULL),
-(2, 'E-41774', 'image-1000x1000 (4).jpg', 1250, 'Sample', 'Sample', 'Sample', 'Customer Service Agent', 'Customer Service Manager', 'New Hired on Board', '2023-11-19', ' IT Department', 'Male', '34', 22, '2023-11-23', 'QC', '34', 'test@gmail.com', NULL),
-(4, 'E-00005', 'image-1000x1000.jpg', 1250, 'Sample 2', 'Sample 2', 'Sample 2', 'Customer Service Agent', 'Customer Service Supervisor', 'New Hired on Board', '2023-11-16', 'Customer Service Department', 'Male', 'Sample 2', 22, '2023-11-15', 'Sample 2', '234234', 'Sample2@gmai.l.com', NULL),
-(5, 'E-00006', 'EIS.jpg', 1250, 'Sample 2', 'Sample 2', 'Sample 2', 'Customer Service Agent', 'Customer Service Supervisor', 'New Hired on Board', '2023-11-08', 'Customer Service Department', 'Male', 'Sample 2', 22, '2023-11-15', 'Sample 2', '234234', 'Sample2@gmai.l.com', NULL),
-(6, '1232345', '111.jpg', 1250, 'Sample 2', 'Sample 2', 'Sample 2', 'Customer Service Agent', 'Customer Service Manager', 'New Hired on Board', '2023-11-08', 'IT Department', 'Male', 'Sample 2', 22, '2023-11-15', 'Sample 2', '234234', 'Sample2@gmai.l.com', NULL),
-(7, '2342342', '3sample.jpg', 1250, 'Sample 2', 'Sample 2', 'Sample 2', 'IT Security Officer', 'IT Security Manager', 'New Hired on Board', '2023-11-27', 'Admin Department', 'Male', 'Sample 2', 22, '2023-11-15', 'Sample 2', '234234', 'Sample2@gmai.l.com', NULL),
-(8, 'E-09005', 'image-1000x1000 (5).jpg', 1250, 'WalaTO', 'WalaTO', 'WalaTO', 'Customer Service Agent', 'Customer Service Supervisor', 'New Hired on Board', '2023-12-01', 'Customer Service Department', 'Male', 'WalaTO', 22, '2023-11-20', 'WalaTO', '324324', 'WalaTO@gmail.com', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -261,6 +225,7 @@ INSERT INTO `employeetbl` (`id`, `employeeID`, `emp_image`, `daily_rate`, `emp_f
 
 CREATE TABLE `emprecords` (
   `id` int(255) NOT NULL,
+  `employeeID` int(11) NOT NULL,
   `emp_records` varchar(255) DEFAULT NULL,
   `emp_remarks` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -287,17 +252,6 @@ CREATE TABLE `essaccountstbl` (
   `ess_contactno` int(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `essaccountstbl`
---
-
-INSERT INTO `essaccountstbl` (`id`, `username`, `employeeID`, `daily_rate`, `ess_firstname`, `ess_middlename`, `ess_lastname`, `mpin`, `password`, `ess_positionTitle`, `ess_subpositionTitle`, `ess_email`, `ess_contactno`) VALUES
-(1, 'employee01', 'E-00001', 3000, 'Sample', 'Sample', 'Sample', '81dc9bdb52d04dc20036dbd8313ed055', '970fcd33852606d405b932e614837084', 'CustomerServiceAgent                                                                          ', NULL, 'test@gmail.com', 34),
-(2, 'Test3241', 'E-00005', 1250, 'Sample', 'Sample', 'Sample', '81dc9bdb52d04dc20036dbd8313ed055', '82e4c02d025000ea7e30413ff260db61', 'CustomerServiceAgent                                                                          ', NULL, 'test@gmail.com', 34),
-(3, 'sample01', 'E-00001', 1250, 'Sample', 'Sample', 'Sample', '81dc9bdb52d04dc20036dbd8313ed055', '486839d6584c71525ba3a24f8e847a50', 'CustomerServiceAgent                                                                          ', NULL, 'test@gmail.com', 34),
-(4, 'test1234', 'E-00001', 1250, 'Sample', 'Sample', 'Sample', '81dc9bdb52d04dc20036dbd8313ed055', '970fcd33852606d405b932e614837084', 'CustomerServiceAgent                                                                          ', NULL, 'test@gmail.com', 34),
-(5, 'sampleuser01', 'E-41774', 1250, 'Sample', 'Sample', 'Sample', '81dc9bdb52d04dc20036dbd8313ed055', '486839d6584c71525ba3a24f8e847a50', ' CustomerServiceAgent', NULL, 'test@gmail.com', 34);
-
 -- --------------------------------------------------------
 
 --
@@ -315,14 +269,6 @@ CREATE TABLE `evaluationemp` (
   `remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `evaluationemp`
---
-
-INSERT INTO `evaluationemp` (`id`, `nameemp`, `behavior`, `tna`, `quality`, `responsibility`, `dependability`, `remarks`) VALUES
-(1, 'E-00001 - Sample Sample Sample', 50, 50, 50, 50, 50, ''),
-(2, 'E-00001 - Sample Sample Sample', 100, 100, 100, 100, 100, '');
-
 -- --------------------------------------------------------
 
 --
@@ -331,18 +277,11 @@ INSERT INTO `evaluationemp` (`id`, `nameemp`, `behavior`, `tna`, `quality`, `res
 
 CREATE TABLE `examresult` (
   `id` int(11) NOT NULL,
+  `applicantID` int(11) NOT NULL,
   `nameapp` varchar(255) DEFAULT NULL,
   `res_score` int(255) DEFAULT NULL,
   `res_remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `examresult`
---
-
-INSERT INTO `examresult` (`id`, `nameapp`, `res_score`, `res_remarks`) VALUES
-(1, ' A-00001 - Sample Sample Sample', 50, ''),
-(2, ' A-91090 - Test Test Test', 60, '');
 
 -- --------------------------------------------------------
 
@@ -356,27 +295,6 @@ CREATE TABLE `exam_modulestbl` (
   `exam_datecrtd` date DEFAULT NULL,
   `exam_links` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `exam_modulestbl`
---
-
-INSERT INTO `exam_modulestbl` (`id`, `exam_title`, `exam_datecrtd`, `exam_links`) VALUES
-(1, 'Customer Service Manager', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSd858PcYgEQI-RmPZGwTipwJiKS6skp225sZvui24KZrNqsXw/viewform?usp=share_link'),
-(2, 'TourVisa Processing Staff', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSfFp-IYOGqC8UdBoa1rtWnEBJCyLMIsRvrlWnnd7bO0bf8jzQ/viewform?usp=share_link'),
-(3, 'Project Manager', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSePY4v7g2Xicd67yJnJFASKvv0-LfnnsQsDS4MDySxC1Ehn5g/viewform?usp=share_link'),
-(4, 'Sales and Marketing', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSd1i2xk1hR9K0HjUGABh23kKEWkQ_OZyMZngZ0Iv2BnZxzlRw/viewform?usp=share_link'),
-(5, 'Documentation Manager', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSeqEcD-T2fTSzpw0CuST2_wvtD4ywNgR5oEJQriralSUdEWmQ/viewform?usp=share_link'),
-(6, 'Documentation Officer', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLScxz456YAvWyCJp6Pb5Osuo9qOk81OttVLAHp0aFx1Zr-Q-_Q/viewform?usp=share_link'),
-(7, 'General Manager', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSe-3PxP9hETZQ7MGUYbIg7_z1ohiA65QQfN3aLAxzCBuCZ7NA/viewform?usp=share_link'),
-(8, 'Reservation Officer', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSe_vb_Q9oHeUh-TGtzIBKlQD4AF5r5pHFTvB6wtuXhkiHjOdA/viewform?usp=share_link'),
-(9, 'Travel Consultant', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSfdGBGBNdLz7BKxKgmIpi_52veKQ2l1sYqJIUkNdl7YyLCx4Q/viewform?usp=share_link'),
-(10, 'Administrative Staff', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSeGgZT0rRSgL0WRB30h4X6-Cu8Ox9Klnk5fvGCBlmuaYdy3JA/viewform?usp=share_link'),
-(11, 'Liaison Staff', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSeyuNIF29SaYJOzBBbmw79b3PICk6_vUTxVhlRLdqZePMdcDw/viewform?usp=share_link'),
-(12, 'Sales Manager', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSf69aGaw0wEMHvSj8rCQMia2PnRkMeE_0bEBtOopVRCNRZIxA/viewform?usp=share_link'),
-(13, 'Database Administrator', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLScwkCaasUbM-gKTKMFf2dTbq4xkct8VrdL9Vp7uZcl0Qd8mrQ/viewform?usp=share_link'),
-(14, 'IT Technical Officer', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLSeHCspxnUzTndxe_UQIyo24iwveFvDzkh_7S3K5S9Ct7BPYSA/viewform?usp=share_link'),
-(15, 'IT Security Officer', '2023-02-22', 'https://docs.google.com/forms/d/e/1FAIpQLScZgiMCSkbIqKj1gC3ckjSPJoeulcJZnzBnyKcVeajCOzqd-Q/viewform?usp=share_link');
 
 -- --------------------------------------------------------
 
@@ -404,7 +322,7 @@ CREATE TABLE `facilitiestbl` (
 
 CREATE TABLE `finalinterviewtbl` (
   `id` int(11) NOT NULL,
-  `nameapp` varchar(255) DEFAULT NULL,
+  `applicantID` int(11) NOT NULL,
   `fq1` int(3) DEFAULT NULL,
   `fq2` int(3) DEFAULT NULL,
   `fq3` int(3) DEFAULT NULL,
@@ -417,13 +335,6 @@ CREATE TABLE `finalinterviewtbl` (
   `fq10` int(3) DEFAULT NULL,
   `final_remarks` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `finalinterviewtbl`
---
-
-INSERT INTO `finalinterviewtbl` (`id`, `nameapp`, `fq1`, `fq2`, `fq3`, `fq4`, `fq5`, `fq6`, `fq7`, `fq8`, `fq9`, `fq10`, `final_remarks`) VALUES
-(1, 'A-00001 - Sample Sample Sample', 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, '');
 
 -- --------------------------------------------------------
 
@@ -451,7 +362,7 @@ CREATE TABLE `financial` (
 
 CREATE TABLE `interviewtbl` (
   `id` int(11) NOT NULL,
-  `nameapp` varchar(255) DEFAULT NULL,
+  `applicantID` int(11) NOT NULL,
   `iq1` int(3) DEFAULT NULL,
   `iq2` int(3) DEFAULT NULL,
   `iq3` int(3) DEFAULT NULL,
@@ -465,15 +376,6 @@ CREATE TABLE `interviewtbl` (
   `initial_remarks` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `interviewtbl`
---
-
-INSERT INTO `interviewtbl` (`id`, `nameapp`, `iq1`, `iq2`, `iq3`, `iq4`, `iq5`, `iq6`, `iq7`, `iq8`, `iq9`, `iq10`, `initial_remarks`) VALUES
-(1, 'A-00001 - Sample Sample Sample', 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, ''),
-(2, 'A-36591 - TestApplicant TestApplicant TestApplicant', 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, ''),
-(3, 'A-00001 - Sample Sample Sample', 5, 5, 4, 5, 5, 5, 5, 5, 5, 5, '');
-
 -- --------------------------------------------------------
 
 --
@@ -486,13 +388,6 @@ CREATE TABLE `jobvacancytbl` (
   `job_date` date DEFAULT NULL,
   `job_available` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `jobvacancytbl`
---
-
-INSERT INTO `jobvacancytbl` (`id`, `job_title`, `job_date`, `job_available`) VALUES
-(1, 'Customer Service Agent', '2023-11-02', 0);
 
 -- --------------------------------------------------------
 
@@ -526,14 +421,6 @@ CREATE TABLE `reqcandr` (
   `reqdate` date DEFAULT NULL,
   `candr_file` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `reqcandr`
---
-
-INSERT INTO `reqcandr` (`id`, `username`, `type`, `note`, `status`, `emp`, `name`, `remarks`, `reqdate`, `candr_file`) VALUES
-(1, 'sampleuser01', 'Separation Pay', '', 'Pending', 'E-41774', 'Sample Sample Sample', NULL, '2023-11-02', NULL),
-(2, 'sampleuser01', 'Reimbursement', '', 'Pending', 'E-41774', 'Sample Sample Sample', NULL, '2023-11-02', 'image-1000x1000 (3).jpg');
 
 -- --------------------------------------------------------
 
@@ -572,13 +459,6 @@ CREATE TABLE `reqemployee` (
   `note` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `reqemployee`
---
-
-INSERT INTO `reqemployee` (`id`, `purpose`, `title`, `req_date`, `status`, `job_num`, `subs`, `remarks`, `note`) VALUES
-(1, 'Request New Employee', 'Customer Service Agent', '2023-11-02', 'Pending', 2, NULL, NULL, '');
-
 -- --------------------------------------------------------
 
 --
@@ -595,14 +475,6 @@ CREATE TABLE `reqexammodulestbl` (
   `req_exam_links` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `reqexammodulestbl`
---
-
-INSERT INTO `reqexammodulestbl` (`id`, `req_exam_title`, `req_exam_date`, `req_exam_status`, `req_exam_remarks`, `req_exam_purpose`, `req_exam_links`) VALUES
-(1, 'Customer Service Manager', '2023-11-01', NULL, '                                                    ', 'Exam', 'http://localhost/HR/HumanResource1/Modules/Applicant%20Management/RequestExam.php                 '),
-(2, 'Sales and Marketing', '2023-11-02', NULL, '', 'Exam', 'http://localhost/HR/index.php');
-
 -- --------------------------------------------------------
 
 --
@@ -618,13 +490,6 @@ CREATE TABLE `reqincentives` (
   `status` varchar(255) DEFAULT NULL,
   `remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `reqincentives`
---
-
-INSERT INTO `reqincentives` (`id`, `type`, `req_date`, `name`, `note`, `status`, `remarks`) VALUES
-(1, 'Retirement incentives ', '2023-11-02', ' Sample, Sample ( E-00001 ) ', '', 'Pending', NULL);
 
 -- --------------------------------------------------------
 
@@ -645,15 +510,6 @@ CREATE TABLE `reqleave` (
   `proof_file` varchar(255) DEFAULT NULL,
   `remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `reqleave`
---
-
-INSERT INTO `reqleave` (`id`, `username`, `lv_leave`, `lv_note`, `lv_datefrom`, `lv_dateto`, `lv_status`, `emp`, `name`, `proof_file`, `remarks`) VALUES
-(1, 'employee01', 'Sick Leave', '', '2023-11-01', '2023-11-03', 'Approved', 'E-00001', 'Sample Sample Sample', 'image-1000x1000 (1).jpg', ''),
-(2, 'test1234', 'Maternity leave', '', '2023-11-15', '2023-11-14', 'Declined', 'E-00001', 'Sample Sample Sample', 'Branding-design (1).docx', ''),
-(3, 'sampleuser01', 'Vacation Leave', '', '2023-11-09', '2023-11-15', 'Pending', 'E-41774', 'Sample Sample Sample', 'image-1000x1000 (3).jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -690,13 +546,6 @@ CREATE TABLE `reqmodules` (
   `req_module_file` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `reqmodules`
---
-
-INSERT INTO `reqmodules` (`id`, `req_module_title`, `req_module_date`, `req_module_remarks`, `req_module_purpose`, `req_module_file`) VALUES
-(1, 'Customer Service Manager', '2023-11-02', '', 'Training', 'VOIDABLE-MARRIAGES.pdf');
-
 -- --------------------------------------------------------
 
 --
@@ -716,13 +565,6 @@ CREATE TABLE `reqpayroll` (
   `remarks` varchar(1000) DEFAULT NULL,
   `payroll_file` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `reqpayroll`
---
-
-INSERT INTO `reqpayroll` (`id`, `username`, `yrmonth`, `quarter`, `note`, `status`, `emp`, `name`, `datereq`, `remarks`, `payroll_file`) VALUES
-(1, 'sampleuser01', '2023-12', 'Last of Month', '', 'Pending', 'E-41774', 'Sample Sample Sample', '2023-11-02', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -749,14 +591,6 @@ CREATE TABLE `reqsands` (
   `remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `reqsands`
---
-
-INSERT INTO `reqsands` (`id`, `username`, `employeeID`, `status`, `name`, `reqdate`, `note`, `day1`, `day2`, `day3`, `day4`, `day5`, `dayoff1`, `dayoff2`, `shift`, `remarks`) VALUES
-(1, 'test1234', 'E-00001', 'Pending', 'Sample Sample Sample', '2023-11-02', '', 'Wednesday', 'Wednesday', 'Wednesday', 'Wednesday', 'Tuesday', 'Monday', 'Wednesday', 'Morning Shift - 8:00 AM - 5:00 PM', NULL),
-(2, 'sampleuser01', 'E-41774', 'Pending', 'Sample Sample Sample', '2023-11-02', '', 'Tuesday', 'Tuesday', 'Wednesday', 'Tuesday', 'Tuesday', 'Wednesday', 'Tuesday', 'Night Shift - 8:00 PM - 5:00 AM', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -779,14 +613,6 @@ CREATE TABLE `shiftandschedule` (
   `remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `shiftandschedule`
---
-
-INSERT INTO `shiftandschedule` (`id`, `username`, `fullname`, `employeeID`, `day1`, `day2`, `day3`, `day4`, `day5`, `dayoff1`, `dayoff2`, `shift`, `remarks`) VALUES
-(1, 'employee01', 'Sample, Sample Sample', 'E-00001', 'Monday', 'Tuesday', 'Thursday', 'Wednesday', 'Tuesday', 'Thursday', 'Wednesday', 'Morning Shift - 8:00 AM - 5:00 PM', NULL),
-(2, 'test1234', 'Sample, Sample Sample', 'E-00001', 'Tuesday', 'Friday', 'Friday', 'Thursday', 'Monday', 'Tuesday', 'Wednesday', 'Night Shift - 8:00 PM - 5:00 AM', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -801,17 +627,12 @@ CREATE TABLE `timeattendance` (
   `shift` varchar(255) DEFAULT NULL,
   `date_attendance` date DEFAULT NULL,
   `timein` time DEFAULT NULL,
-  `timeout` time DEFAULT NULL
+  `timeout` time DEFAULT NULL,
+  `ot_from` time DEFAULT NULL,
+  `ot_to` time DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `date_submit` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `timeattendance`
---
-
-INSERT INTO `timeattendance` (`id`, `username`, `empid`, `fullname`, `shift`, `date_attendance`, `timein`, `timeout`) VALUES
-(1, 'employee01', 'E-00001', 'Sample,  Sample Sample ', 'Morning Shift - 8:00 AM - 5:00 PM', '2023-11-01', '14:44:00', '14:45:00'),
-(2, 'sampleuser01', 'E-41774', 'Sample,  Sample Sample ', 'Morning Shift - 8:00 AM - 5:00 PM', '2023-11-15', '23:33:00', '23:33:00'),
-(3, 'sampleuser01', 'E-41774', 'Sample,  Sample Sample ', 'Special Shift 1 - 6:00 AM - 6:00 PM', '2023-11-01', '20:41:00', '20:39:00');
 
 -- --------------------------------------------------------
 
@@ -839,13 +660,6 @@ CREATE TABLE `timesheet` (
   `sp2` varchar(255) DEFAULT NULL,
   `sp3` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `timesheet`
---
-
-INSERT INTO `timesheet` (`id`, `username`, `name`, `employeeID`, `timesheet_date`, `date_submit`, `shift`, `first`, `second`, `third`, `fourth`, `fifth`, `sixth`, `seven`, `eigth`, `sp1`, `sp2`, `sp3`) VALUES
-(1, 'sampleuser01', 'Sample, Sample Sample', 'E-41774', '0000-00-00', '2023-11-02', 'Special Shift 1 - 6:00 AM - 6:00 PM', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a');
 
 -- --------------------------------------------------------
 
@@ -881,7 +695,7 @@ INSERT INTO `tntaccount` (`id`, `username`, `employeeID`, `firstname`, `middlena
 (7, 'coreuser1', 'E-00007', 'Core1', 'User', 'One', '81dc9bdb52d04dc20036dbd8313ed055', '486839d6584c71525ba3a24f8e847a50', 'Core1', 'sample@gmail.com', 2147483647),
 (8, 'coreuser2', 'E-00008', 'Core2', 'User', 'One', '81dc9bdb52d04dc20036dbd8313ed055', '486839d6584c71525ba3a24f8e847a50', 'Core2', 'sample@gmail.com', 2147483647),
 (9, 'logisticuser', 'E-00009', 'Logistic', 'User', 'One', '81dc9bdb52d04dc20036dbd8313ed055', '486839d6584c71525ba3a24f8e847a50', 'Logistic', 'sample@gmail.com', 2147483647),
-(10, 'tntaccount01', 'E-000010', 'Super Admin', 'User', 'One', '81dc9bdb52d04dc20036dbd8313ed055', '970fcd33852606d405b932e614837084', 'Super Admin', 'sample@gmail.com', 2147483647);
+(10, 'skystream', 'E-000010', 'Super Admin', 'User', 'One', '81dc9bdb52d04dc20036dbd8313ed055', '970fcd33852606d405b932e614837084', 'Super Admin', 'sample@gmail.com', 2147483647);
 
 -- --------------------------------------------------------
 
@@ -895,28 +709,6 @@ CREATE TABLE `trainingmodulestbl` (
   `train_datecrtd` date DEFAULT NULL,
   `train_files` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `trainingmodulestbl`
---
-
-INSERT INTO `trainingmodulestbl` (`id`, `train_title`, `train_datecrtd`, `train_files`) VALUES
-(1, 'Customer Service Agent', '2023-02-22', 'Customer service agent - Training.pdf'),
-(2, 'Customer Service Manager', '2023-02-22', 'Customer-Service-Manager-Training.pdf'),
-(3, 'TourVisa Processing Staff', '2023-02-22', 'Tour Visa Processing Staff - Training.pdf'),
-(4, 'Project Manager', '2023-02-22', 'Project Managers - Training.pdf'),
-(5, 'Sales and Marketing', '2023-02-22', 'Sales and Marketing - Training.pdf'),
-(6, 'Documentation Manager', '2023-02-22', 'Documentation Manager - Training.pdf'),
-(7, 'Documentation Officer', '2023-02-22', 'Documentation Officer - Training.pdf'),
-(8, 'General Manager', '2023-02-22', 'General-Manager-Training.pdf'),
-(9, 'Reservation Officer', '2023-02-22', 'Reservation-Officer-Training.pdf'),
-(10, 'Travel Consultant', '2023-02-22', 'Travel Consultant  - Training.pdf'),
-(11, 'Administrative Staff', '2023-02-22', 'Administrative-staff-Training.pdf'),
-(12, 'Liaison Staff', '2023-02-22', 'Liaison Staff - Training.pdf'),
-(13, 'Sales Manager', '2023-02-22', 'Sales-Manager-Training.pdf'),
-(14, 'Database Administrator', '2023-02-24', 'Database Administrator - Training.pdf'),
-(15, 'IT Technical Officer', '2023-02-04', 'IT Technical Officer - Training.pdf'),
-(16, 'TourVisa Processing Staff', '2023-11-25', '20231101175047.pdf');
 
 -- --------------------------------------------------------
 
@@ -935,13 +727,6 @@ CREATE TABLE `trainingresult` (
   `remarks` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `trainingresult`
---
-
-INSERT INTO `trainingresult` (`id`, `nameemp`, `satisfaction`, `application`, `learning`, `behavior`, `accomplishment`, `remarks`) VALUES
-(1, 'E-00001 - Sample Sample Sample', 50, 50, 50, 50, 50, '                                                  ');
-
 -- --------------------------------------------------------
 
 --
@@ -955,13 +740,6 @@ CREATE TABLE `trainingschedtbl` (
   `train_sched_to` date DEFAULT NULL,
   `train_sched_remarks` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `trainingschedtbl`
---
-
-INSERT INTO `trainingschedtbl` (`id`, `nameemp`, `train_sched_from`, `train_sched_to`, `train_sched_remarks`) VALUES
-(1, 'E-00001 - Sample Sample Sample', '2023-11-23', '2023-11-16', ' test\r\n                                          ');
 
 -- --------------------------------------------------------
 
@@ -981,6 +759,13 @@ CREATE TABLE `visitor` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `applicantoverall`
+--
+ALTER TABLE `applicantoverall`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkapplicant` (`applicantID`);
 
 --
 -- Indexes for table `applicantschedtbl`
@@ -1040,7 +825,8 @@ ALTER TABLE `employeetbl`
 -- Indexes for table `emprecords`
 --
 ALTER TABLE `emprecords`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_empID` (`employeeID`);
 
 --
 -- Indexes for table `essaccountstbl`
@@ -1058,7 +844,8 @@ ALTER TABLE `evaluationemp`
 -- Indexes for table `examresult`
 --
 ALTER TABLE `examresult`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FOREIGN_KEY` (`applicantID`);
 
 --
 -- Indexes for table `exam_modulestbl`
@@ -1076,7 +863,8 @@ ALTER TABLE `facilitiestbl`
 -- Indexes for table `finalinterviewtbl`
 --
 ALTER TABLE `finalinterviewtbl`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `applicantID` (`applicantID`);
 
 --
 -- Indexes for table `financial`
@@ -1088,7 +876,8 @@ ALTER TABLE `financial`
 -- Indexes for table `interviewtbl`
 --
 ALTER TABLE `interviewtbl`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `applicantID` (`applicantID`);
 
 --
 -- Indexes for table `jobvacancytbl`
@@ -1215,22 +1004,28 @@ ALTER TABLE `visitor`
 --
 
 --
+-- AUTO_INCREMENT for table `applicantoverall`
+--
+ALTER TABLE `applicantoverall`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `applicantschedtbl`
 --
 ALTER TABLE `applicantschedtbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `applicanttbl`
 --
 ALTER TABLE `applicanttbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `benefits`
 --
 ALTER TABLE `benefits`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -1248,19 +1043,19 @@ ALTER TABLE `certificatestbl`
 -- AUTO_INCREMENT for table `competencytbl`
 --
 ALTER TABLE `competencytbl`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `create_payroll`
 --
 ALTER TABLE `create_payroll`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `employeetbl`
 --
 ALTER TABLE `employeetbl`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `emprecords`
@@ -1272,25 +1067,25 @@ ALTER TABLE `emprecords`
 -- AUTO_INCREMENT for table `essaccountstbl`
 --
 ALTER TABLE `essaccountstbl`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `evaluationemp`
 --
 ALTER TABLE `evaluationemp`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `examresult`
 --
 ALTER TABLE `examresult`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `exam_modulestbl`
 --
 ALTER TABLE `exam_modulestbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `facilitiestbl`
@@ -1302,7 +1097,7 @@ ALTER TABLE `facilitiestbl`
 -- AUTO_INCREMENT for table `finalinterviewtbl`
 --
 ALTER TABLE `finalinterviewtbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `financial`
@@ -1314,13 +1109,13 @@ ALTER TABLE `financial`
 -- AUTO_INCREMENT for table `interviewtbl`
 --
 ALTER TABLE `interviewtbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jobvacancytbl`
 --
 ALTER TABLE `jobvacancytbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `legaldocumentstbl`
@@ -1332,7 +1127,7 @@ ALTER TABLE `legaldocumentstbl`
 -- AUTO_INCREMENT for table `reqcandr`
 --
 ALTER TABLE `reqcandr`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqdocument`
@@ -1344,25 +1139,25 @@ ALTER TABLE `reqdocument`
 -- AUTO_INCREMENT for table `reqemployee`
 --
 ALTER TABLE `reqemployee`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqexammodulestbl`
 --
 ALTER TABLE `reqexammodulestbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqincentives`
 --
 ALTER TABLE `reqincentives`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqleave`
 --
 ALTER TABLE `reqleave`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqlegaldocutbl`
@@ -1374,37 +1169,37 @@ ALTER TABLE `reqlegaldocutbl`
 -- AUTO_INCREMENT for table `reqmodules`
 --
 ALTER TABLE `reqmodules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqpayroll`
 --
 ALTER TABLE `reqpayroll`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reqsands`
 --
 ALTER TABLE `reqsands`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `shiftandschedule`
 --
 ALTER TABLE `shiftandschedule`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `timeattendance`
 --
 ALTER TABLE `timeattendance`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `timesheet`
 --
 ALTER TABLE `timesheet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tntaccount`
@@ -1416,25 +1211,59 @@ ALTER TABLE `tntaccount`
 -- AUTO_INCREMENT for table `trainingmodulestbl`
 --
 ALTER TABLE `trainingmodulestbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `trainingresult`
 --
 ALTER TABLE `trainingresult`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `trainingschedtbl`
 --
 ALTER TABLE `trainingschedtbl`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `visitor`
 --
 ALTER TABLE `visitor`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `applicantoverall`
+--
+ALTER TABLE `applicantoverall`
+  ADD CONSTRAINT `fkapplicant` FOREIGN KEY (`applicantID`) REFERENCES `applicanttbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `emprecords`
+--
+ALTER TABLE `emprecords`
+  ADD CONSTRAINT `fk_empID` FOREIGN KEY (`employeeID`) REFERENCES `applicanttbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `examresult`
+--
+ALTER TABLE `examresult`
+  ADD CONSTRAINT `FOREIGN_KEY` FOREIGN KEY (`applicantID`) REFERENCES `applicanttbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `finalinterviewtbl`
+--
+ALTER TABLE `finalinterviewtbl`
+  ADD CONSTRAINT `fk` FOREIGN KEY (`applicantID`) REFERENCES `applicanttbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `interviewtbl`
+--
+ALTER TABLE `interviewtbl`
+  ADD CONSTRAINT `interviewtbl_ibfk_1` FOREIGN KEY (`applicantID`) REFERENCES `applicanttbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

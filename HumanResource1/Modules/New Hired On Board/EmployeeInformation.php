@@ -311,7 +311,7 @@
                                         while ($employee = mysqli_fetch_array($sql)) {
                                             # code...
                               ?>
-                            <tr>
+                            <tr data-information="<?php echo json_encode($employee); ?>" data-id="<?php echo $employee['id']; ?>">
                               <td class="fw-bold"><?php echo $employee['employeeID'];?></td>
                               <td class="fw-bold"><?php echo $employee['emp_firstname'];?><?php echo $employee['emp_middlename'];?><?php echo $employee['emp_lastname'];?></td>
                               <td class="fw-bold">
@@ -349,6 +349,14 @@
                                         data-bs-target="#addaccount<?php echo $employee['id'] ?>">
                                         <i class="bi bi-person-badge"></i>
                                 </button>
+
+                                <button type="button" class="btn btn-secondary" 
+                                        data-bs-toggle="modal" title="Create Employee Account" 
+                                        data-bs-target="#showTaskModal">
+                                        <i class="bi bi-person-badge"></i>
+                                </button>
+
+                                
 
 
                                 <div class="modal fade" id="view<?php echo $employee['id'] ?>" aria-labelledby="view" aria-hidden="true">
@@ -846,6 +854,73 @@
             </div>
           </div>
         </main>
+
+        <div class="modal fade" id="showTaskModal" aria-labelledby="addaccount" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title fw-bold">ADD EMPLOYEE ACCOUNTS</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                <form action="../../../Controller/essaccountsQuery.php" method="POST">
+
+                                                <input type="text" id="view_emp_firstname">
+                                      
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+                                                </form>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+        <script>
+        $('.showTaskModal').on('click', function(e) {
+            e.preventDefault(); // Use e.preventDefault() to prevent the default behavior
+            var taskInformation = $(this).closest('tr[data-information]').data('information');
+            showFunction(taskInformation);
+        });
+
+        function showFunction(data) {   
+          console.log(data);
+          var first_name = document.getElementById('view_emp_firstname');
+          view_emp_firstname.innerHTML = data.emp_firstname;
+            // var date_create = new Date(data.date_create);
+            // var formattedDateCreate = date_create.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            
+            // var dateStart = new Date(data.date_start);
+            // var formattedDateStart = dateStart.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            
+            // var dateEnd = new Date(data.date_end);
+            // var formattedDateEnd = dateEnd.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    
+            // var title = document.getElementById('view_title');
+
+
+
+            // var type = document.getElementById('view_type');
+            // var status = document.getElementById('view_status');
+            // var man_working_days = document.getElementById('view_man_working_days');
+            // var date_start = document.getElementById('view_date_start');
+            // var date_end = document.getElementById('view_date_end');
+    
+            // view_date_create.value = formattedDateCreate;
+            // view_title.value = data.title;
+            // description.innerHTML = data.description;
+            // view_type.value = data.type;
+            // view_status.value = data.status;
+            // view_man_working_days.value = data.man_working_days;
+            // view_date_start.value = formattedDateStart;
+            // view_date_end.value = formattedDateEnd;
+    
+            $('#showTaskModal').modal('show');
+        }
+    </script>
         <!-- ### $App Screen Footer ### -->
         <footer class="bdT ta-c p-30 lh-0 fsz-sm c-grey-600">
           <span
